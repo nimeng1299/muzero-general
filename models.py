@@ -95,8 +95,7 @@ class MuZeroFullyConnectedNetwork(AbstractNetwork):
         self.action_space_size = action_space_size
         self.full_support_size = 2 * support_size + 1
 
-        self.representation_network = torch.nn.DataParallel(
-            mlp(
+        self.representation_network = mlp(
                 observation_shape[0]
                 * observation_shape[1]
                 * observation_shape[2]
@@ -105,25 +104,20 @@ class MuZeroFullyConnectedNetwork(AbstractNetwork):
                 fc_representation_layers,
                 encoding_size,
             )
-        )
 
-        self.dynamics_encoded_state_network = torch.nn.DataParallel(
-            mlp(
+        self.dynamics_encoded_state_network = mlp(
                 encoding_size + self.action_space_size,
                 fc_dynamics_layers,
                 encoding_size,
             )
-        )
-        self.dynamics_reward_network = torch.nn.DataParallel(
-            mlp(encoding_size, fc_reward_layers, self.full_support_size)
-        )
 
-        self.prediction_policy_network = torch.nn.DataParallel(
-            mlp(encoding_size, fc_policy_layers, self.action_space_size)
-        )
-        self.prediction_value_network = torch.nn.DataParallel(
-            mlp(encoding_size, fc_value_layers, self.full_support_size)
-        )
+        self.dynamics_reward_network = mlp(encoding_size, fc_reward_layers, self.full_support_size)
+
+
+        self.prediction_policy_network = mlp(encoding_size, fc_policy_layers, self.action_space_size)
+
+        self.prediction_value_network = mlp(encoding_size, fc_value_layers, self.full_support_size)
+
 
     def prediction(self, encoded_state):
         policy_logits = self.prediction_policy_network(encoded_state)
@@ -483,18 +477,16 @@ class MuZeroResidualNetwork(AbstractNetwork):
             else (reduced_channels_policy * observation_shape[1] * observation_shape[2])
         )
 
-        self.representation_network = torch.nn.DataParallel(
-            RepresentationNetwork(
+        self.representation_network = RepresentationNetwork(
                 observation_shape,
                 stacked_observations,
                 num_blocks,
                 num_channels,
                 downsample,
             )
-        )
 
-        self.dynamics_network = torch.nn.DataParallel(
-            DynamicsNetwork(
+
+        self.dynamics_network = DynamicsNetwork(
                 num_blocks,
                 num_channels + 1,
                 reduced_channels_reward,
@@ -502,10 +494,9 @@ class MuZeroResidualNetwork(AbstractNetwork):
                 self.full_support_size,
                 block_output_size_reward,
             )
-        )
 
-        self.prediction_network = torch.nn.DataParallel(
-            PredictionNetwork(
+
+        self.prediction_network = PredictionNetwork(
                 action_space_size,
                 num_blocks,
                 num_channels,
@@ -517,7 +508,7 @@ class MuZeroResidualNetwork(AbstractNetwork):
                 block_output_size_value,
                 block_output_size_policy,
             )
-        )
+
 
     def prediction(self, encoded_state):
         policy, value = self.prediction_network(encoded_state)

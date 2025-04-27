@@ -11,7 +11,7 @@ import nevergrad
 import numpy
 import ray
 import torch
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard.writer import SummaryWriter
 
 import diagnose_model
 import models
@@ -620,6 +620,7 @@ def load_model_menu(muzero, game_name):
 
 
 if __name__ == "__main__":
+    print("可用 GPU 设备 ID:", list(range(torch.cuda.device_count())))
     if len(sys.argv) == 2:
         # Train directly with: python muzero.py cartpole
         muzero = MuZero(sys.argv[1])
