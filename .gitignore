@@ -92,4 +92,4 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-.results/
+results/
