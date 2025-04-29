@@ -169,7 +169,7 @@ class Zhenqi:
         self.board_markers = [
             chr(x) for x in range(ord("A"), ord("A") + self.board_size)
         ]
-
+        self.history = 0
     # 0 为先手 1 为后手
     def to_play(self):
         return 0 if self.player == 1 else 1
@@ -177,6 +177,7 @@ class Zhenqi:
     def reset(self):
         self.board = numpy.zeros((self.board_size, self.board_size), dtype="int32")
         self.player = 1
+        self.history = 0
         return self.get_observation()
 
     def step(self, action):
@@ -185,6 +186,7 @@ class Zhenqi:
 
         assert self.board[x][y] == 0, f"Invalid action x:{x}, y:{y}"
         self.board[x][y] = self.player
+        self.history += 1
 
         done = self.is_finished()
         reward = 1 if done == self.player else -1 if done == self.player*-1 else 0
@@ -203,7 +205,7 @@ class Zhenqi:
                     self.move_piece((x + dx, y + dy), (x + dx + dx, y + dy + dy))
 
         done = self.is_finished()
-        reward = 1 if done == self.player else -1 if done == self.player*-1 else 0
+        reward = 1 if done == self.player else -1 if done == self.player*-1 else 0 - self.history * 0.005
         self.player *= -1
 
         return self.get_observation(), reward, True if done != 0 else False

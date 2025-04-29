@@ -99,7 +99,8 @@ class play_to_play:
                 game_history.observation_history.append(observation)
                 game_history.reward_history.append(reward)
                 game_history.to_play_history.append(self.game.to_play())
-        self.game.render()
+
+                self.game.render()
         who_win = self.game.env.is_finished()
 
         return who_win
