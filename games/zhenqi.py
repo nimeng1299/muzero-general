@@ -136,7 +136,6 @@ class Game(AbstractGame):
         Display the game observation.
         """
         self.env.render()
-        input("Press enter to take a step ")
 
     def human_to_action(self):
         """
@@ -171,6 +170,7 @@ class Zhenqi:
             chr(x) for x in range(ord("A"), ord("A") + self.board_size)
         ]
 
+    # 0 为先手 1 为后手
     def to_play(self):
         return 0 if self.player == 1 else 1
 
@@ -183,7 +183,7 @@ class Zhenqi:
         x = math.floor(action / self.board_size)
         y = action % self.board_size
 
-        assert self.board[x][y] == 0, "Invalid action"
+        assert self.board[x][y] == 0, f"Invalid action x:{x}, y:{y}"
         self.board[x][y] = self.player
 
         done = self.is_finished()
