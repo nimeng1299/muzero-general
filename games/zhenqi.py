@@ -205,7 +205,10 @@ class Zhenqi:
                     self.move_piece((x + dx, y + dy), (x + dx + dx, y + dy + dy))
 
         done = self.is_finished()
-        reward = 1 if done == self.player else -1 if done == self.player*-1 else 0 - self.history * 0.005
+        his_reward = 0 - self.history * 0.003
+        if his_reward < -0.3:
+            his_reward = -0.3
+        reward = 1 if done == self.player else -1 if done == self.player*-1 else his_reward
         self.player *= -1
 
         return self.get_observation(), reward, True if done != 0 else False
