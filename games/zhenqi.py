@@ -205,9 +205,15 @@ class Zhenqi:
                     self.move_piece((x + dx, y + dy), (x + dx + dx, y + dy + dy))
 
         done = self.is_finished()
-        his_reward = 0 - self.history * 0.003
-        if his_reward < -0.3:
-            his_reward = -0.3
+        his_reward = 0
+        if self.history > 10 and self.history < 30:
+            his_reward = -0.02
+        elif self.history >= 30 and self.history < 50:
+            his_reward = -0.04
+        elif self.history >= 50 and self.history < 80:
+            his_reward = -0.07
+        elif self.history >= 80
+            his_reward = -0.09
         reward = 1 if done == self.player else -1 if done == self.player*-1 else his_reward
         self.player *= -1
 
