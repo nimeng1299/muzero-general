@@ -209,11 +209,11 @@ class Zhenqi:
         if self.history > 10 and self.history < 30:
             his_reward = -0.02
         elif self.history >= 30 and self.history < 50:
-            his_reward = -0.04
+            his_reward = -0.04 + 0.001 * (self.history - 30)
         elif self.history >= 50 and self.history < 80:
-            his_reward = -0.07
+            his_reward = -0.075 + 0.002 * (self.history - 50)
         elif self.history >= 80:
-            his_reward = -0.09
+            his_reward = -0.15 + 0.005 * (self.history - 80)
         reward = 1 if done == self.player else -1 if done == self.player*-1 else his_reward
         self.player *= -1
 
